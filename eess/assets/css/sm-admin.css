@@ -1,0 +1,13 @@
+/**
+ * EESS Unified Design System Stylesheet (Admin Panel)
+ * Imports/mirrors sm-public.css rules for total consistency across WP Admin & Frontend
+ */
+
+@import url('sm-public.css');
+
+/* Admin specific overrides if required while enforcing exact design system */
+body.wp-admin .sm-content-wrapper,
+body.wp-admin .sm-admin-dashboard {
+    margin-right: 10px;
+    padding-top: 10px;
+}
