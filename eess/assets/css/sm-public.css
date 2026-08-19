@@ -1,0 +1,366 @@
+/**
+ * EESS Unified Design System Stylesheet (Public & Core)
+ * Palette: White, Black, Grayscale/Monochromatic, Dark Burgundy Accent (#8b1e1e)
+ * Component Rules: Buttons fully rounded (pill), Cards/Tables/Fields lightly rounded (10px)
+ */
+
+:root {
+    --eess-accent: #8b1e1e;
+    --eess-accent-hover: #6b1515;
+    --eess-black: #000000;
+    --eess-dark-slate: #0f172a;
+    --eess-charcoal: #1e293b;
+    --eess-gray-text: #475569;
+    --eess-muted: #64748b;
+    --eess-border: #cbd5e1;
+    --eess-light-border: #e2e8f0;
+    --eess-bg-subtle: #f8fafc;
+    --eess-bg-hover: #f1f5f9;
+    --eess-white: #ffffff;
+
+    --eess-radius-pill: 9999px;
+    --eess-radius-corner: 10px;
+    --eess-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --eess-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --eess-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+    --eess-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Global Font & Reset */
+.sm-content-wrapper, .sm-admin-dashboard, .sm-container, .eess-app-container,
+.sm-content-wrapper *:not(.dashicons), .sm-admin-dashboard *:not(.dashicons), .sm-container *:not(.dashicons) {
+    font-family: 'Cairo', 'Noto Kufi Arabic', system-ui, -apple-system, BlinkMacSystemFont, sans-serif !important;
+    color: var(--eess-dark-slate);
+    box-sizing: border-box;
+}
+
+/* Base Layout Containers & Cards */
+.sm-card-grid, .eess-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.sm-stat-card, .eess-card, .sm-table-container, .sm-modal-content {
+    background: var(--eess-white);
+    border-radius: var(--eess-radius-corner) !important;
+    border: 1px solid var(--eess-light-border);
+    box-shadow: var(--eess-shadow-sm);
+    transition: var(--eess-transition);
+}
+
+.sm-stat-card {
+    padding: 20px;
+    text-align: center;
+}
+
+.sm-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--eess-shadow-md);
+    border-color: var(--eess-border);
+}
+
+/* Buttons - Standardized Fully Rounded Pill Design */
+.sm-btn, .eess-btn,
+.sm-content-wrapper button, .sm-admin-dashboard button, .sm-container button,
+.sm-btn-secondary, .sm-btn-accent, .sm-btn-outline, .sm-btn-destructive, .sm-btn-danger {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 8px 20px !important;
+    border-radius: var(--eess-radius-pill) !important;
+    font-weight: 700 !important;
+    font-size: 0.88rem !important;
+    cursor: pointer !important;
+    transition: var(--eess-transition) !important;
+    border: 1px solid transparent !important;
+    gap: 8px !important;
+    text-decoration: none !important;
+    line-height: 1.4 !important;
+    outline: none !important;
+}
+
+/* Primary Button (Dark Burgundy Accent) */
+.sm-btn, .eess-btn, .sm-btn-primary, .eess-btn-primary {
+    background-color: var(--eess-accent) !important;
+    color: var(--eess-white) !important;
+}
+
+.sm-btn:hover, .eess-btn:hover, .sm-btn-primary:hover, .eess-btn-primary:hover {
+    background-color: var(--eess-accent-hover) !important;
+    color: var(--eess-white) !important;
+    box-shadow: var(--eess-shadow-md) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Black / Dark Neutral Button */
+.sm-btn-black, .sm-btn-dark-admin, .eess-btn-dark {
+    background-color: var(--eess-black) !important;
+    color: var(--eess-white) !important;
+}
+
+.sm-btn-black:hover, .sm-btn-dark-admin:hover, .eess-btn-dark:hover {
+    background-color: var(--eess-charcoal) !important;
+    color: var(--eess-white) !important;
+}
+
+/* Secondary Button (Monochromatic Gray) */
+.sm-btn-secondary, .eess-btn-secondary {
+    background-color: var(--eess-charcoal) !important;
+    color: var(--eess-white) !important;
+}
+
+.sm-btn-secondary:hover, .eess-btn-secondary:hover {
+    background-color: var(--eess-dark-slate) !important;
+    color: var(--eess-white) !important;
+}
+
+/* Outline / Subtle Button */
+.sm-btn-outline, .eess-btn-outline {
+    background-color: transparent !important;
+    border-color: var(--eess-border) !important;
+    color: var(--eess-charcoal) !important;
+}
+
+.sm-btn-outline:hover, .eess-btn-outline:hover {
+    background-color: var(--eess-bg-hover) !important;
+    color: var(--eess-black) !important;
+    border-color: var(--eess-charcoal) !important;
+}
+
+/* Destructive / Danger Button */
+.sm-btn-destructive, .sm-btn-danger, .sm-btn-critical, .eess-btn-danger {
+    background-color: var(--eess-accent) !important;
+    color: var(--eess-white) !important;
+}
+
+.sm-btn-destructive:hover, .sm-btn-danger:hover, .sm-btn-critical:hover, .eess-btn-danger:hover {
+    background-color: var(--eess-accent-hover) !important;
+}
+
+/* Lightly Rounded Form Elements */
+.sm-input, .sm-select, .sm-textarea, .eess-float-input,
+.form-control, .sm-content-wrapper input[type="text"], .sm-content-wrapper input[type="email"],
+.sm-content-wrapper input[type="password"], .sm-content-wrapper input[type="number"],
+.sm-content-wrapper input[type="date"], .sm-content-wrapper input[type="time"],
+.sm-content-wrapper select, .sm-content-wrapper textarea {
+    width: 100%;
+    height: 42px;
+    background: var(--eess-bg-subtle);
+    border: 1px solid var(--eess-border);
+    border-radius: var(--eess-radius-corner) !important;
+    padding: 8px 14px;
+    font-size: 0.88rem;
+    color: var(--eess-dark-slate);
+    transition: var(--eess-transition);
+    box-sizing: border-box;
+}
+
+.sm-textarea {
+    height: auto !important;
+    min-height: 90px;
+}
+
+.sm-input:focus, .sm-select:focus, .sm-textarea:focus, .eess-float-input:focus {
+    outline: none !important;
+    border-color: var(--eess-black) !important;
+    background: var(--eess-white) !important;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1) !important;
+}
+
+/* Floating Label Form Component */
+.sm-form-group, .eess-form-group {
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.eess-float-container, .sm-float-container {
+    position: relative;
+    width: 100%;
+}
+
+.eess-float-label, .sm-float-label {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--eess-muted);
+    pointer-events: none;
+    transition: var(--eess-transition);
+    background: transparent;
+    padding: 0 4px;
+    z-index: 5;
+}
+
+.eess-float-input:focus ~ .eess-float-label,
+.eess-float-input:not(:placeholder-shown) ~ .eess-float-label,
+.sm-input:focus ~ .sm-float-label,
+.sm-input:not(:placeholder-shown) ~ .sm-float-label,
+.eess-float-container select ~ .eess-float-label,
+.sm-float-container select ~ .sm-float-label,
+.eess-float-container input[type="date"] ~ .eess-float-label,
+.sm-float-container input[type="date"] ~ .sm-float-label,
+.sm-textarea:focus ~ .sm-float-label,
+.sm-textarea:not(:placeholder-shown) ~ .sm-float-label {
+    top: 0;
+    transform: translateY(-50%) scale(0.85);
+    background: var(--eess-white);
+    color: var(--eess-black);
+    font-weight: 700;
+}
+
+/* Standardized Data Tables */
+.sm-table-container {
+    background: var(--eess-white);
+    border-radius: var(--eess-radius-corner) !important;
+    border: 1px solid var(--eess-light-border);
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--eess-shadow-sm);
+}
+
+.sm-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: right;
+}
+
+.sm-table th {
+    background: var(--eess-bg-subtle);
+    padding: 12px 16px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--eess-charcoal);
+    border-bottom: 2px solid var(--eess-light-border);
+    text-align: right;
+}
+
+.sm-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--eess-light-border);
+    font-size: 0.88rem;
+    vertical-align: middle;
+}
+
+.sm-table tr:hover {
+    background-color: var(--eess-bg-hover);
+}
+
+/* Modals */
+.sm-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.sm-modal-content {
+    background: var(--eess-white);
+    padding: 28px;
+    border-radius: var(--eess-radius-corner) !important;
+    width: 100%;
+    max-width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--eess-shadow-lg);
+}
+
+.sm-modal-header {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--eess-light-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sm-modal-header h3 {
+    margin: 0;
+    color: var(--eess-charcoal);
+    font-weight: 800;
+    font-size: 1.15rem;
+}
+
+.sm-modal-close {
+    background: var(--eess-bg-subtle);
+    border: 1px solid var(--eess-light-border);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--eess-radius-pill) !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--eess-muted);
+    transition: var(--eess-transition);
+}
+
+.sm-modal-close:hover {
+    color: var(--eess-accent);
+    background: var(--eess-bg-hover);
+}
+
+/* Status Badges - Monochromatic & Burgundy Accents */
+.sm-badge, .eess-badge {
+    padding: 4px 12px;
+    border-radius: var(--eess-radius-pill) !important;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-block;
+    text-align: center;
+}
+
+.sm-badge-low, .eess-badge-muted { background: var(--eess-bg-hover); color: var(--eess-muted); border: 1px solid var(--eess-border); }
+.sm-badge-medium, .eess-badge-dark { background: var(--eess-charcoal); color: var(--eess-white); }
+.sm-badge-high, .eess-badge-accent { background: var(--eess-accent); color: var(--eess-white); }
+
+/* Navigation Tabs */
+.sm-tabs-wrapper, .eess-tabs-wrapper {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--eess-light-border);
+    padding: 0 4px;
+}
+
+.sm-tab-btn, .eess-tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--eess-muted);
+    border-bottom: 3px solid transparent;
+    transition: var(--eess-transition);
+    font-size: 0.88rem;
+}
+
+.sm-tab-btn:hover, .eess-tab-btn:hover {
+    color: var(--eess-black);
+    background: var(--eess-bg-hover);
+    border-radius: var(--eess-radius-corner) var(--eess-radius-corner) 0 0;
+}
+
+.sm-tab-btn.sm-active, .eess-tab-btn.active {
+    color: var(--eess-accent);
+    border-bottom-color: var(--eess-accent);
+}
+
+/* Animations */
+@keyframes eessFadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.sm-modal-overlay[style*="display: flex"] .sm-modal-content {
+    animation: eessFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
