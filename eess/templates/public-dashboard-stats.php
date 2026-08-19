@@ -57,7 +57,7 @@
                         البحث عن طالب
                     </label>
                     <div style="position: relative;">
-                        <input type="text" name="student_search" value="<?php echo esc_attr($_GET['student_search'] ?? ''); ?>" placeholder="اسم الطالب أو رقم الهوية / الرقم الأكاديمي..." style="width: 100%; height: 46px; padding: 0 42px 0 16px; border: 1px solid #cbd5e1; border-radius: 14px; font-size: 13px; outline: none; background: #f8fafc; transition: all 0.2s;" onfocus="this.style.borderColor='#dc2626'; this.style.background='#fff';" onblur="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc';">
+                        <input type="text" name="student_search" value="<?php echo esc_attr($_GET['student_search'] ?? ''); ?>" placeholder="اسم الطالب أو رقم الهوية / الرقم الأكاديمي..." style="width: 100%; height: 46px; padding: 0 46px 0 16px; border: 1px solid #cbd5e1; border-radius: 14px; font-size: 13px; outline: none; background: #f8fafc; transition: all 0.2s;" onfocus="this.style.borderColor='#dc2626'; this.style.background='#fff';" onblur="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc';">
                         <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; display: flex; align-items: center;">
                             <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </span>
@@ -70,7 +70,7 @@
                         الصف الدراسي
                     </label>
                     <div style="position: relative;">
-                        <select name="class_filter" style="width: 100%; height: 46px; padding: 0 38px 0 16px; border: 1px solid #cbd5e1; border-radius: 14px; font-size: 13px; outline: none; background: #f8fafc; appearance: none; -webkit-appearance: none; cursor: pointer; transition: all 0.2s;" onfocus="this.style.borderColor='#dc2626'; this.style.background='#fff';" onblur="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc';">
+                        <select name="class_filter" style="width: 100%; height: 46px; padding: 0 46px 0 36px; border: 1px solid #cbd5e1; border-radius: 14px; font-size: 13px; outline: none; background: #f8fafc; appearance: none; -webkit-appearance: none; cursor: pointer; transition: all 0.2s;" onfocus="this.style.borderColor='#dc2626'; this.style.background='#fff';" onblur="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc';">
                             <option value="">جميع الصفوف</option>
                             <?php
                             global $wpdb;
@@ -82,7 +82,7 @@
                         <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; display: flex; align-items: center;">
                             <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                         </span>
-                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none;">▼</span>
+                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; font-size: 10px;">▼</span>
                     </div>
                 </div>
 
@@ -92,7 +92,7 @@
                         الشعبة
                     </label>
                     <div style="position: relative;">
-                        <select name="section_filter" style="width: 100%; height: 46px; padding: 0 38px 0 16px; border: 1px solid #cbd5e1; border-radius: 14px; font-size: 13px; outline: none; background: #f8fafc; appearance: none; -webkit-appearance: none; cursor: pointer; transition: all 0.2s;" onfocus="this.style.borderColor='#dc2626'; this.style.background='#fff';" onblur="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc';">
+                        <select name="section_filter" style="width: 100%; height: 46px; padding: 0 46px 0 36px; border: 1px solid #cbd5e1; border-radius: 14px; font-size: 13px; outline: none; background: #f8fafc; appearance: none; -webkit-appearance: none; cursor: pointer; transition: all 0.2s;" onfocus="this.style.borderColor='#dc2626'; this.style.background='#fff';" onblur="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc';">
                             <option value="">جميع الشعب</option>
                             <?php
                             $sections = $wpdb->get_col("SELECT DISTINCT section FROM {$wpdb->prefix}sm_students WHERE section != '' ORDER BY section ASC");
@@ -103,7 +103,7 @@
                         <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; display: flex; align-items: center;">
                             <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                         </span>
-                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none;">▼</span>
+                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; font-size: 10px;">▼</span>
                     </div>
                 </div>
                 <?php endif; ?>
@@ -114,7 +114,7 @@
                         نوع المخالفة
                     </label>
                     <div style="position: relative;">
-                        <select name="type_filter" style="width: 100%; height: 46px; padding: 0 38px 0 16px; border: 1px solid #cbd5e1; border-radius: 14px; font-size: 13px; outline: none; background: #f8fafc; appearance: none; -webkit-appearance: none; cursor: pointer; transition: all 0.2s;" onfocus="this.style.borderColor='#dc2626'; this.style.background='#fff';" onblur="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc';">
+                        <select name="type_filter" style="width: 100%; height: 46px; padding: 0 46px 0 36px; border: 1px solid #cbd5e1; border-radius: 14px; font-size: 13px; outline: none; background: #f8fafc; appearance: none; -webkit-appearance: none; cursor: pointer; transition: all 0.2s;" onfocus="this.style.borderColor='#dc2626'; this.style.background='#fff';" onblur="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc';">
                             <option value="">جميع الأنواع</option>
                             <?php foreach (SM_Settings::get_violation_types() as $k => $v): ?>
                                 <option value="<?php echo esc_attr($k); ?>" <?php selected(isset($_GET['type_filter']) && $_GET['type_filter'] == $k); ?>><?php echo esc_html($v); ?></option>
@@ -123,7 +123,7 @@
                         <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; display: flex; align-items: center;">
                             <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                         </span>
-                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none;">▼</span>
+                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; font-size: 10px;">▼</span>
                     </div>
                 </div>
 
@@ -139,48 +139,120 @@
         </form>
     </div>
 
-    <div id="violation-import-form" style="display:none; background: #f8fafc; padding: 30px; border: 2px dashed #cbd5e0; border-radius: 12px; margin-bottom: 30px;">
-        <h3 style="margin-top:0; color:var(--sm-secondary-color);">دليل استيراد السجلات (CSV)</h3>
+    <!-- Excel & CSV Import System with Guide -->
+    <div id="violation-import-form" style="display:none; background: #ffffff; padding: 28px; border: 1px solid #e2e8f0; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #f1f5f9; padding-bottom: 14px;">
+            <h3 style="margin: 0; color: #1e293b; font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 10px;">
+                <span style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #eff6ff; color: #2563eb; border-radius: 10px;">
+                    📥
+                </span>
+                دليل ونظام استيراد سجلات المخالفات (Excel / CSV)
+            </h3>
+            <a href="data:text/csv;charset=utf-8,<?php echo rawurlencode("كود الطالب,نوع المخالفة,الحدة,التفاصيل,الإجراء المتخذ,المكافأة/العقوبة,التاريخ\nSTU001,تعدي على الزملاء,خطيرة,تعدي بداخل الفصل,إنذار كتابي,خصم درجتين,2025-02-20"); ?>" download="violation_import_template.csv" class="sm-btn" style="background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: 12px; padding: 0 16px; height: 38px; font-size: 12px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                <span>📄</span> تحميل نموذج الاستيراد المعتمد
+            </a>
+        </div>
         
-        <div style="background:#fff; padding:15px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
-            <p style="font-size:13px; font-weight:700; margin-bottom:10px;">هيكل ملف السجلات الصحيح:</p>
-            <table style="width:100%; font-size:11px; border-collapse:collapse; text-align:center;">
-                <thead>
-                    <tr style="background:#edf2f7;">
-                        <th style="border:1px solid #cbd5e0; padding:5px;">كود الطالب</th>
-                        <th style="border:1px solid #cbd5e0; padding:5px;">النوع (سلوك/غياب/تأخر)</th>
-                        <th style="border:1px solid #cbd5e0; padding:5px;">الحدة (منخفضة/متوسطة/خطيرة)</th>
-                        <th style="border:1px solid #cbd5e0; padding:5px;">التفاصيل</th>
-                        <th style="border:1px solid #cbd5e0; padding:5px;">الإجراء المتخذ</th>
-                        <th style="border:1px solid #cbd5e0; padding:5px;">المكافأة/العقوبة</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="border:1px solid #cbd5e0; padding:5px;">STU001</td>
-                        <td style="border:1px solid #cbd5e0; padding:5px;">سلوكية</td>
-                        <td style="border:1px solid #cbd5e0; padding:5px;">خطيرة</td>
-                        <td style="border:1px solid #cbd5e0; padding:5px;">تعدي على الزملاء</td>
-                        <td style="border:1px solid #cbd5e0; padding:5px;">فصل 3 أيام</td>
-                        <td style="border:1px solid #cbd5e0; padding:5px;">حرمان من الرحلة</td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Excel Import Guide Table -->
+        <div style="background: #f8fafc; padding: 18px; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
+            <p style="font-size: 13px; font-weight: 800; color: #334155; margin: 0 0 12px 0;">📋 دليل أعمدة ملف Excel / CSV المتوقع لاستيراد المخالفات السلوكية:</p>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; font-size: 12px; border-collapse: collapse; text-align: right; background: #ffffff; border-radius: 10px; overflow: hidden; border: 1px solid #cbd5e1;">
+                    <thead>
+                        <tr style="background: #334155; color: #ffffff;">
+                            <th style="padding: 10px 12px; font-weight: 800;">#</th>
+                            <th style="padding: 10px 12px; font-weight: 800;">اسم العمود</th>
+                            <th style="padding: 10px 12px; font-weight: 800;">محتوى البيانات</th>
+                            <th style="padding: 10px 12px; font-weight: 800;">الحالة</th>
+                            <th style="padding: 10px 12px; font-weight: 800;">الصيغة المتوقعة</th>
+                            <th style="padding: 10px 12px; font-weight: 800;">قيمة توضيحية</th>
+                            <th style="padding: 10px 12px; font-weight: 800;">قيود وملاحظات</th>
+                        </tr>
+                    </thead>
+                    <tbody style="color: #334155;">
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 12px; font-weight: 800;">1</td>
+                            <td style="padding: 10px 12px; font-weight: 800; color: #0284c7;">كود الطالب</td>
+                            <td style="padding: 10px 12px;">الكود / الرقم الأكاديمي للطالب</td>
+                            <td style="padding: 10px 12px;"><span style="padding: 2px 8px; background: #fee2e2; color: #991b1b; border-radius: 6px; font-weight: 800; font-size: 11px;">إجباري</span></td>
+                            <td style="padding: 10px 12px;">نص أو أرقام</td>
+                            <td style="padding: 10px 12px; font-weight: 700; color: #0f172a;">STU001</td>
+                            <td style="padding: 10px 12px; color: #64748b;">يجب أن يكون كود الطالب مسجلاً مسبقاً بالنظام</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9; background: #f8fafc;">
+                            <td style="padding: 10px 12px; font-weight: 800;">2</td>
+                            <td style="padding: 10px 12px; font-weight: 800; color: #0284c7;">نوع المخالفة</td>
+                            <td style="padding: 10px 12px;">مسمى المخالفة أو البند السلوكي</td>
+                            <td style="padding: 10px 12px;"><span style="padding: 2px 8px; background: #fee2e2; color: #991b1b; border-radius: 6px; font-weight: 800; font-size: 11px;">إجباري</span></td>
+                            <td style="padding: 10px 12px;">نص عربي</td>
+                            <td style="padding: 10px 12px; font-weight: 700; color: #0f172a;">تعدي على الزملاء</td>
+                            <td style="padding: 10px 12px; color: #64748b;">يفضل مطابقة مسمى البند في لائحة السلوك</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 12px; font-weight: 800;">3</td>
+                            <td style="padding: 10px 12px; font-weight: 800; color: #0284c7;">الحدة / الدرجة</td>
+                            <td style="padding: 10px 12px;">درجة المخالفة أو خطورتها</td>
+                            <td style="padding: 10px 12px;"><span style="padding: 2px 8px; background: #f1f5f9; color: #475569; border-radius: 6px; font-weight: 700; font-size: 11px;">اختياري</span></td>
+                            <td style="padding: 10px 12px;">بسيطة/متوسطة/خطيرة أو 1/2/3/4</td>
+                            <td style="padding: 10px 12px; font-weight: 700; color: #0f172a;">خطيرة</td>
+                            <td style="padding: 10px 12px; color: #64748b;">عند تركها فارغة تفترض "بسيطة" تلقائياً</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9; background: #f8fafc;">
+                            <td style="padding: 10px 12px; font-weight: 800;">4</td>
+                            <td style="padding: 10px 12px; font-weight: 800; color: #0284c7;">التفاصيل</td>
+                            <td style="padding: 10px 12px;">شرح الموقف السلوكي المباشر</td>
+                            <td style="padding: 10px 12px;"><span style="padding: 2px 8px; background: #f1f5f9; color: #475569; border-radius: 6px; font-weight: 700; font-size: 11px;">اختياري</span></td>
+                            <td style="padding: 10px 12px;">نص توضيحي</td>
+                            <td style="padding: 10px 12px; font-weight: 700; color: #0f172a;">مشادة كلامية في الممر</td>
+                            <td style="padding: 10px 12px; color: #64748b;">تظهر في بطاقة المخالفة للولاة والجهة الإدارية</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 12px; font-weight: 800;">5</td>
+                            <td style="padding: 10px 12px; font-weight: 800; color: #0284c7;">الإجراء المتخذ</td>
+                            <td style="padding: 10px 12px;">القرار أو العقوبة الصادرة</td>
+                            <td style="padding: 10px 12px;"><span style="padding: 2px 8px; background: #f1f5f9; color: #475569; border-radius: 6px; font-weight: 700; font-size: 11px;">اختياري</span></td>
+                            <td style="padding: 10px 12px;">نص الإجراء</td>
+                            <td style="padding: 10px 12px; font-weight: 700; color: #0f172a;">فصل 3 أيام واستدعاء ولي الأمر</td>
+                            <td style="padding: 10px 12px; color: #64748b;">اختياري ويمكن تسجيله لاحقاً</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9; background: #f8fafc;">
+                            <td style="padding: 10px 12px; font-weight: 800;">6</td>
+                            <td style="padding: 10px 12px; font-weight: 800; color: #0284c7;">المكافأة/العقوبة</td>
+                            <td style="padding: 10px 12px;">الخصم أو الخصم المستحق من الدرجات</td>
+                            <td style="padding: 10px 12px;"><span style="padding: 2px 8px; background: #f1f5f9; color: #475569; border-radius: 6px; font-weight: 700; font-size: 11px;">اختياري</span></td>
+                            <td style="padding: 10px 12px;">نص أو أرقام</td>
+                            <td style="padding: 10px 12px; font-weight: 700; color: #0f172a;">حرمان من الرحلة</td>
+                            <td style="padding: 10px 12px; color: #64748b;">تأثير إضافي على ملف الطالب</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 12px; font-weight: 800;">7</td>
+                            <td style="padding: 10px 12px; font-weight: 800; color: #0284c7;">التاريخ</td>
+                            <td style="padding: 10px 12px;">تاريخ تسجيل وقوع المخالفة</td>
+                            <td style="padding: 10px 12px;"><span style="padding: 2px 8px; background: #f1f5f9; color: #475569; border-radius: 6px; font-weight: 700; font-size: 11px;">اختياري</span></td>
+                            <td style="padding: 10px 12px;">YYYY-MM-DD</td>
+                            <td style="padding: 10px 12px; font-weight: 700; color: #0f172a;">2025-02-20</td>
+                            <td style="padding: 10px 12px; color: #64748b;">في حال تركها فارغة يتم اعتماد تاريخ اليوم تلقائياً</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <form method="post" enctype="multipart/form-data" onsubmit="return handleImportSubmit(this, 'sm_import_violations_csv')">
             <?php wp_nonce_field('sm_admin_action', 'sm_admin_nonce'); ?>
             <div class="sm-form-group">
-                <label class="sm-label">اختر ملف CSV للمخالفات:</label>
-                <input type="file" name="csv_file" accept=".csv" required>
+                <label style="display: block; margin-bottom: 8px; font-weight: 700; font-size: 13px; color: #334155;">اختر ملف Excel (.xlsx / .csv) للمخالفات:</label>
+                <input type="file" name="csv_file" accept=".csv, .xlsx, .xls" required style="display: block; width: 100%; padding: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 13px;">
             </div>
-            <div id="import-loading" style="display:none; margin-bottom: 15px; padding: 10px; background: #ebf8ff; border-left: 4px solid #3182ce; color: #2c5282; font-weight: 700;">
-                <span class="dashicons dashicons-update spin" style="margin-left: 10px;"></span>
-                جاري استيراد البيانات... يرجى عدم إغلاق الصفحة.
+
+            <div id="import-loading" style="display:none; margin-top: 15px; margin-bottom: 15px; padding: 14px 18px; background: #ebf8ff; border-radius: 12px; border-right: 4px solid #3182ce; color: #2c5282; font-weight: 700; font-size: 13px;">
+                <span class="dashicons dashicons-update spin" style="margin-left: 10px; vertical-align: middle;"></span>
+                جاري استيراد ومعالجة البيانات... يرجى الانتظار وعدم إغلاق أو تحديث الصفحة.
             </div>
-            <div style="display:flex; gap:10px; margin-top:20px;">
-                <button type="submit" name="sm_import_violations_csv" class="sm-btn" style="width:auto; background:#27ae60;">استيراد السجلات الآن</button>
-                <button type="button" onclick="this.parentElement.parentElement.parentElement.style.display='none'" class="sm-btn" style="width:auto; background:var(--sm-text-gray);">إلغاء</button>
+
+            <div style="display:flex; gap:12px; margin-top:20px; justify-content: flex-end;">
+                <button type="submit" name="sm_import_violations_csv" class="sm-btn" style="background:#16a34a; color:#fff; border-radius: 12px; height: 44px; padding: 0 24px; font-weight: 800; border: none; cursor: pointer;">بدء استيراد السجلات الآن</button>
+                <button type="button" onclick="document.getElementById('violation-import-form').style.display='none'" class="sm-btn" style="background:#f1f5f9; color:#475569; border: 1px solid #cbd5e1; border-radius: 12px; height: 44px; padding: 0 20px; font-weight: 700; cursor: pointer;">إلغاء</button>
             </div>
         </form>
 
@@ -189,10 +261,12 @@
             const btn = form.querySelector('button[name="' + btnName + '"]');
             const loader = form.querySelector('#import-loading');
 
-            btn.disabled = true;
-            btn.style.opacity = '0.5';
-            btn.innerText = 'جاري المعالجة...';
-            if(loader) loader.style.display = 'block';
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.innerText = 'جاري المعالجة...';
+            }
+            if (loader) loader.style.display = 'block';
 
             return true;
         }
@@ -402,6 +476,27 @@
     }
     </script>
 
+    <?php
+    $paged = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
+    $per_page = 10;
+    $initial_filters = array(
+        'page' => $paged,
+        'per_page' => $per_page
+    );
+    if (!empty($_GET['student_search'])) $initial_filters['search'] = sanitize_text_field($_GET['student_search']);
+    if (!empty($_GET['class_filter'])) $initial_filters['class_name'] = sanitize_text_field($_GET['class_filter']);
+    if (!empty($_GET['section_filter'])) $initial_filters['section'] = sanitize_text_field($_GET['section_filter']);
+    if (!empty($_GET['type_filter'])) $initial_filters['type'] = sanitize_text_field($_GET['type_filter']);
+
+    $total_records = SM_DB::get_records_count($initial_filters);
+    $total_pages = max(1, ceil($total_records / $per_page));
+    if ($paged > $total_pages) {
+        $paged = $total_pages;
+        $initial_filters['page'] = $paged;
+    }
+    $records = SM_DB::get_records($initial_filters);
+    ?>
+
     <!-- Violations Table Container -->
     <div style="background: #ffffff; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.03); overflow: hidden; margin-bottom: 24px;">
         <div style="overflow-x: auto;">
@@ -422,6 +517,41 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- Pagination Container -->
+    <div id="violations-pagination-container">
+        <?php if ($total_pages > 1): ?>
+        <div class="sm-pagination-wrapper" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.02);">
+            <div style="font-size: 13px; color: #64748b; font-weight: 600;">
+                عرض <?php echo count($records); ?> من أصل <?php echo number_format($total_records); ?> سجل (صفحة <?php echo $paged; ?> من <?php echo $total_pages; ?>)
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <!-- Previous Button -->
+                <button type="button" <?php echo ($paged <= 1) ? 'disabled' : 'onclick="smGoToPage(' . ($paged - 1) . ')"'; ?> class="sm-btn" style="height: 36px; padding: 0 14px; font-size: 12px; font-weight: 700; border-radius: 10px; background: <?php echo ($paged <= 1) ? '#f1f5f9' : '#ffffff'; ?>; color: <?php echo ($paged <= 1) ? '#94a3b8' : '#334155'; ?>; border: 1px solid #cbd5e1; cursor: <?php echo ($paged <= 1) ? 'not-allowed' : 'pointer'; ?>;">
+                    السابق
+                </button>
+
+                <!-- Page Number Buttons -->
+                <?php
+                $start_p = max(1, $paged - 2);
+                $end_p = min($total_pages, $paged + 2);
+                if ($start_p > 1) echo '<span style="color: #94a3b8; font-weight: bold; padding: 0 2px;">...</span>';
+                for ($p = $start_p; $p <= $end_p; $p++):
+                ?>
+                    <button type="button" onclick="smGoToPage(<?php echo $p; ?>)" class="sm-btn" style="height: 36px; min-width: 36px; padding: 0 10px; font-size: 12px; font-weight: 800; border-radius: 10px; background: <?php echo ($p === $paged) ? '#dc2626' : '#ffffff'; ?>; color: <?php echo ($p === $paged) ? '#ffffff' : '#334155'; ?>; border: 1px solid <?php echo ($p === $paged) ? '#dc2626' : '#cbd5e1'; ?>; cursor: pointer;">
+                        <?php echo $p; ?>
+                    </button>
+                <?php endfor; ?>
+                <?php if ($end_p < $total_pages) echo '<span style="color: #94a3b8; font-weight: bold; padding: 0 2px;">...</span>'; ?>
+
+                <!-- Next Button -->
+                <button type="button" <?php echo ($paged >= $total_pages) ? 'disabled' : 'onclick="smGoToPage(' . ($paged + 1) . ')"'; ?> class="sm-btn" style="height: 36px; padding: 0 14px; font-size: 12px; font-weight: 700; border-radius: 10px; background: <?php echo ($paged >= $total_pages) ? '#f1f5f9' : '#ffffff'; ?>; color: <?php echo ($paged >= $total_pages) ? '#94a3b8' : '#334155'; ?>; border: 1px solid #cbd5e1; cursor: <?php echo ($paged >= $total_pages) ? 'not-allowed' : 'pointer'; ?>;">
+                    التالي
+                </button>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
 
     <!-- View Details Modal -->
@@ -515,13 +645,37 @@
     }
 
     (function() {
-        // AJAX Filtering Logic
+        window.smGoToPage = function(p) {
+            const form = document.getElementById('violation-filter-form');
+            if (form) {
+                let input = form.querySelector('input[name="paged"]');
+                if (!input) {
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'paged';
+                    form.appendChild(input);
+                }
+                input.value = p;
+                form.dispatchEvent(new Event('submit'));
+            }
+        };
+
+        // AJAX Filtering & Pagination Logic
         const filterForm = document.getElementById('violation-filter-form');
         if (filterForm) {
+            // Reset page to 1 when changing dropdowns or searching
+            filterForm.querySelectorAll('select, input[type="text"]').forEach(el => {
+                el.addEventListener('change', () => {
+                    let input = filterForm.querySelector('input[name="paged"]');
+                    if (input) input.value = 1;
+                });
+            });
+
             filterForm.onsubmit = function(e) {
                 e.preventDefault();
                 const loader = document.getElementById('filter-loader');
                 const tbody = document.getElementById('violations-table-body');
+                const pagContainer = document.getElementById('violations-pagination-container');
 
                 if (loader) loader.style.display = 'inline-block';
                 tbody.style.opacity = '0.5';
@@ -538,6 +692,9 @@
                 .then(res => {
                     if (res.success) {
                         tbody.innerHTML = res.data.html;
+                        if (pagContainer && res.data.pagination !== undefined) {
+                            pagContainer.innerHTML = res.data.pagination;
+                        }
                     }
                 })
                 .finally(() => {

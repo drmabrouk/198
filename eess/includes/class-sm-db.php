@@ -362,11 +362,65 @@ class SM_DB {
         
         $query .= " ORDER BY r.created_at DESC";
 
-        if (!empty($filters['limit'])) {
+        if (!empty($filters['page']) || !empty($filters['per_page'])) {
+            $per_page = !empty($filters['per_page']) ? intval($filters['per_page']) : 10;
+            $page = !empty($filters['page']) ? max(1, intval($filters['page'])) : 1;
+            $offset = ($page - 1) * $per_page;
+            $query .= $wpdb->prepare(" LIMIT %d OFFSET %d", $per_page, $offset);
+        } elseif (!empty($filters['limit'])) {
             $query .= $wpdb->prepare(" LIMIT %d", $filters['limit']);
         }
 
         return $wpdb->get_results($query);
+    }
+
+    public static function get_records_count($filters = array()) {
+        global $wpdb;
+        $scope_filter = EESS_Org_Helper::filter_students_query('s');
+        $query = "SELECT COUNT(*) FROM {$wpdb->prefix}sm_records r JOIN {$wpdb->prefix}sm_students s ON r.student_id = s.id LEFT JOIN {$wpdb->prefix}eess_schools sch ON s.school_id = sch.id WHERE " . $scope_filter;
+
+        if (!empty($filters['student_id'])) {
+            $query .= $wpdb->prepare(" AND r.student_id = %d", $filters['student_id']);
+        }
+
+        if (!empty($filters['search'])) {
+            $search_str = trim($filters['search']);
+            $normalized_search = self::normalize_arabic($search_str);
+            $search_like = '%' . $wpdb->esc_like($normalized_search) . '%';
+            $name_sql = self::get_arabic_normalized_column('s.name');
+
+            $query .= $wpdb->prepare(" AND ($name_sql LIKE %s OR s.student_code LIKE %s)", $search_like, $search_like);
+        }
+
+        if (!empty($filters['class_name'])) {
+            $query .= $wpdb->prepare(" AND s.class_name = %s", $filters['class_name']);
+        }
+
+        if (!empty($filters['section'])) {
+            $query .= $wpdb->prepare(" AND s.section = %s", $filters['section']);
+        }
+
+        if (!empty($filters['teacher_id'])) {
+            $query .= $wpdb->prepare(" AND r.teacher_id = %d", $filters['teacher_id']);
+        }
+
+        if (!empty($filters['type'])) {
+            $query .= $wpdb->prepare(" AND r.type = %s", $filters['type']);
+        }
+
+        if (!empty($filters['status'])) {
+            $query .= $wpdb->prepare(" AND r.status = %s", $filters['status']);
+        }
+
+        if (!empty($filters['start_date'])) {
+            $query .= $wpdb->prepare(" AND r.created_at >= %s", $filters['start_date'] . ' 00:00:00');
+        }
+
+        if (!empty($filters['end_date'])) {
+            $query .= $wpdb->prepare(" AND r.created_at <= %s", $filters['end_date'] . ' 23:59:59');
+        }
+
+        return intval($wpdb->get_var($query));
     }
 
     public static function mark_record_contacted($record_id) {
