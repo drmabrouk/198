@@ -53,14 +53,12 @@
 
         // School Display
         $school_display = !empty($row->school_name) ? $row->school_name : 'المدرسة الرئيسية';
-        $class_sec_display = SM_Settings::format_grade_name($row->class_name, $row->section, 'short');
-        if (empty($class_sec_display)) {
-            $class_sec_display = trim(($row->class_name ?? '') . ' ' . ($row->section ?? ''));
-        }
+        $grade_display = !empty($row->class_name) ? $row->class_name : 'غير محدد';
+        $section_display = !empty($row->section) ? 'شعبة ' . $row->section : 'شعبة غير محددة';
 
         // Nationality & ID
         $student_id_code = !empty($row->student_code) ? $row->student_code : '---';
-        $nationality_str = !empty($row->nationality) ? $row->nationality : 'غير محدد';
+        $nationality_str = !empty($row->nationality) ? $row->nationality : '';
 
         // Severity Color Styles
         $severity_bg = '#f1f5f9';
@@ -79,17 +77,18 @@
         }
     ?>
         <tr id="record-row-<?php echo $row->id; ?>" style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
-            <!-- Student Cell -->
+            <!-- Student Identity & School Cell -->
             <td style="padding: 16px 20px; vertical-align: middle;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 44px; height: 44px; min-width: 44px; min-height: 44px; border-radius: 50%; overflow: hidden; background: #e2e8f0; display: flex; align-items: center; justify-content: center; border: 2px solid #f1f5f9; flex-shrink: 0;">
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                    <div style="width: 44px; height: 44px; min-width: 44px; min-height: 44px; border-radius: 50%; overflow: hidden; background: #e2e8f0; display: flex; align-items: center; justify-content: center; border: 2px solid #f1f5f9; flex-shrink: 0; margin-top: 2px;">
                         <?php if (!empty($row->photo_url)): ?>
                             <img src="<?php echo esc_url($row->photo_url); ?>" alt="<?php echo esc_attr($row->student_name); ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;" />
                         <?php else: ?>
                             <svg width="22" height="22" fill="#94a3b8" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                         <?php endif; ?>
                     </div>
-                    <div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <!-- Primary Name -->
                         <div style="font-weight: 800; font-size: 14px; color: #1e293b; display: flex; align-items: center; gap: 6px;">
                             <?php echo esc_html($row->student_name); ?>
                             <?php if (current_user_can('إدارة_الطلاب')): ?>
@@ -102,24 +101,36 @@
                                     "guardian_phone" => $row->guardian_phone ?? "",
                                     "student_id" => $row->student_code
                                 )); ?>)' style="background: none; border: none; padding: 0; cursor: pointer; color: #94a3b8; display: inline-flex;" title="تعديل بيانات الطالب">
-                                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 210.3H3v-3.572L16.732 3.732z"></path></svg>
+                                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 210.3H3v-3.572L16.732 3.732z"></path></svg>
                                 </button>
                             <?php endif; ?>
                         </div>
-                        <div style="font-size: 12px; color: #64748b; margin-top: 2px; font-weight: 500;">
-                            رقم الطالب: <span style="font-weight: 700; color: #334155;"><?php echo esc_html($student_id_code); ?></span> | الجنسية: <span style="color: #475569;"><?php echo esc_html($nationality_str); ?></span>
+
+                        <!-- ID Number & Nationality (Directly without "Student ID" label) -->
+                        <div style="font-size: 12px; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                            <span style="color: #0f172a; font-weight: 700;"><?php echo esc_html($student_id_code); ?></span>
+                            <?php if (!empty($nationality_str)): ?>
+                                <span style="color: #cbd5e1;">•</span>
+                                <span style="color: #475569;"><?php echo esc_html($nationality_str); ?></span>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- School Name -->
+                        <div style="font-size: 12px; color: #334155; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                            <svg width="13" height="13" fill="none" stroke="#64748b" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            <span><?php echo esc_html($school_display); ?></span>
+                        </div>
+
+                        <!-- Grade and Section using two professional pastel pills/badges -->
+                        <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px; flex-wrap: wrap;">
+                            <span style="display: inline-flex; align-items: center; padding: 2px 10px; background: #e0f2fe; color: #0369a1; border-radius: 12px; font-size: 11px; font-weight: 700; border: 1px solid #bae6fd;">
+                                <?php echo esc_html($grade_display); ?>
+                            </span>
+                            <span style="display: inline-flex; align-items: center; padding: 2px 10px; background: #f0fdf4; color: #15803d; border-radius: 12px; font-size: 11px; font-weight: 700; border: 1px solid #bbf7d0;">
+                                <?php echo esc_html($section_display); ?>
+                            </span>
                         </div>
                     </div>
-                </div>
-            </td>
-
-            <!-- School / Class / Section -->
-            <td style="padding: 16px 20px; vertical-align: middle;">
-                <div style="font-weight: 700; font-size: 13px; color: #1e293b;">
-                    <?php echo esc_html($school_display); ?>
-                </div>
-                <div style="font-size: 12px; color: #64748b; margin-top: 2px; font-weight: 600;">
-                    <?php echo esc_html($class_sec_display); ?>
                 </div>
             </td>
 
@@ -171,52 +182,52 @@
 
             <!-- Administrative Actions -->
             <td style="padding: 16px 20px; vertical-align: middle; text-align: left;">
-                <div style="display: flex; items-center: center; gap: 6px; justify-content: flex-end;">
+                <div style="display: flex; align-items: center; gap: 6px; justify-content: flex-end; flex-wrap: nowrap;">
                     <!-- Official WhatsApp Icon -->
                     <?php if ($formatted_phone): ?>
                         <a href="https://wa.me/<?php echo $formatted_phone; ?>?text=<?php echo $waMsg; ?>"
                            target="_blank"
                            onclick="markAsContacted(<?php echo $row->id; ?>)"
-                           style="width: 34px; height: 34px; border-radius: 10px; background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"
+                           style="width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 10px; background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; display: inline-flex !important; align-items: center; justify-content: center; text-decoration: none; opacity: 1 !important; visibility: visible !important; transition: all 0.2s;"
                            title="إرسال عبر واتساب">
-                           <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                           <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" style="display: block; width: 18px; height: 18px;"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
                         </a>
                     <?php else: ?>
                         <button type="button" onclick="alert('<?php echo empty($raw_phone) ? 'رقم هاتف ولي الأمر غير مسجل في سجل الطالب' : 'صيغة رقم الهاتف غير صحيحة'; ?>')"
-                                style="width: 34px; height: 34px; border-radius: 10px; background: #f8fafc; color: #cbd5e1; border: 1px solid #e2e8f0; display: inline-flex; align-items: center; justify-content: center; cursor: not-allowed;"
+                                style="width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 10px; background: #f8fafc; color: #cbd5e1; border: 1px solid #e2e8f0; display: inline-flex !important; align-items: center; justify-content: center; cursor: not-allowed; opacity: 1 !important; visibility: visible !important;"
                                 title="واتساب (غير متاح)">
-                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" style="display: block; width: 18px; height: 18px;"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
                         </button>
                     <?php endif; ?>
 
                     <!-- View Details Icon -->
-                    <button type="button" onclick="viewViolationDetails(<?php echo htmlspecialchars(json_encode($row)); ?>)"
-                            style="width: 34px; height: 34px; border-radius: 10px; background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                    <button type="button" onclick="viewViolationDetails(<?php echo htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8'); ?>)"
+                            style="width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 10px; background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; display: inline-flex !important; align-items: center; justify-content: center; cursor: pointer; opacity: 1 !important; visibility: visible !important; transition: all 0.2s;"
                             title="عرض التفاصيل">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: block; width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                     </button>
 
                     <!-- Print Icon -->
                     <a href="<?php echo admin_url('admin-ajax.php?action=sm_print&print_type=single_violation&record_id=' . $row->id); ?>"
                        target="_blank"
-                       style="width: 34px; height: 34px; border-radius: 10px; background: #f0f9ff; color: #0284c7; border: 1px solid #bae6fd; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;"
+                       style="width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 10px; background: #f0f9ff; color: #0284c7; border: 1px solid #bae6fd; display: inline-flex !important; align-items: center; justify-content: center; text-decoration: none; opacity: 1 !important; visibility: visible !important; transition: all 0.2s;"
                        title="طباعة">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: block; width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                     </a>
 
                     <?php if (current_user_can('إدارة_المخالفات') || current_user_can('manage_options')): ?>
                         <!-- Edit Icon -->
-                        <button type="button" onclick="editSmRecord(<?php echo htmlspecialchars(json_encode($row)); ?>)"
-                                style="width: 34px; height: 34px; border-radius: 10px; background: #fffbeb; color: #d97706; border: 1px solid #fde68a; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                        <button type="button" onclick="editSmRecord(<?php echo htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8'); ?>)"
+                                style="width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 10px; background: #fffbeb; color: #d97706; border: 1px solid #fde68a; display: inline-flex !important; align-items: center; justify-content: center; cursor: pointer; opacity: 1 !important; visibility: visible !important; transition: all 0.2s;"
                                 title="تعديل">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: block; width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                         </button>
 
                         <!-- Delete Icon -->
                         <button type="button" onclick="confirmDeleteRecord(<?php echo $row->id; ?>)"
-                                style="width: 34px; height: 34px; border-radius: 10px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                                style="width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 10px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: inline-flex !important; align-items: center; justify-content: center; cursor: pointer; opacity: 1 !important; visibility: visible !important; transition: all 0.2s;"
                                 title="حذف">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: block; width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
                     <?php endif; ?>
                 </div>

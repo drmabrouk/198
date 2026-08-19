@@ -2733,13 +2733,67 @@ class SM_Public {
         if (isset($_POST['section_filter'])) $filters['section'] = sanitize_text_field($_POST['section_filter']);
         if (isset($_POST['type_filter'])) $filters['type'] = sanitize_text_field($_POST['type_filter']);
 
+        $per_page = 10;
+        $page = isset($_POST['paged']) ? max(1, intval($_POST['paged'])) : 1;
+        $filters['page'] = $page;
+        $filters['per_page'] = $per_page;
+
+        $total_records = SM_DB::get_records_count($filters);
+        $total_pages = max(1, ceil($total_records / $per_page));
+        if ($page > $total_pages) {
+            $page = $total_pages;
+            $filters['page'] = $page;
+        }
+
         $records = SM_DB::get_records($filters);
 
         ob_start();
         include SM_PLUGIN_DIR . 'templates/partials/violations-table-rows.php';
         $rows_html = ob_get_clean();
 
-        wp_send_json_success(array('html' => $rows_html));
+        ob_start();
+        ?>
+        <?php if ($total_pages > 1): ?>
+        <div class="sm-pagination-wrapper" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: #ffffff; border-top: 1px solid #e2e8f0; border-radius: 0 0 20px 20px;">
+            <div style="font-size: 13px; color: #64748b; font-weight: 600;">
+                عرض <?php echo count($records); ?> من أصل <?php echo number_format($total_records); ?> سجل (صفحة <?php echo $page; ?> من <?php echo $total_pages; ?>)
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <!-- Previous Button -->
+                <button type="button" <?php echo ($page <= 1) ? 'disabled' : 'onclick="smGoToPage(' . ($page - 1) . ')"'; ?> class="sm-btn" style="height: 36px; padding: 0 14px; font-size: 12px; font-weight: 700; border-radius: 10px; background: <?php echo ($page <= 1) ? '#f1f5f9' : '#ffffff'; ?>; color: <?php echo ($page <= 1) ? '#94a3b8' : '#334155'; ?>; border: 1px solid #cbd5e1; cursor: <?php echo ($page <= 1) ? 'not-allowed' : 'pointer'; ?>;">
+                    السابق
+                </button>
+
+                <!-- Page Number Buttons -->
+                <?php
+                $start_p = max(1, $page - 2);
+                $end_p = min($total_pages, $page + 2);
+                if ($start_p > 1) echo '<span style="color: #94a3b8; font-weight: bold; padding: 0 2px;">...</span>';
+                for ($p = $start_p; $p <= $end_p; $p++):
+                ?>
+                    <button type="button" onclick="smGoToPage(<?php echo $p; ?>)" class="sm-btn" style="height: 36px; min-width: 36px; padding: 0 10px; font-size: 12px; font-weight: 800; border-radius: 10px; background: <?php echo ($p === $page) ? '#dc2626' : '#ffffff'; ?>; color: <?php echo ($p === $page) ? '#ffffff' : '#334155'; ?>; border: 1px solid <?php echo ($p === $page) ? '#dc2626' : '#cbd5e1'; ?>; cursor: pointer;">
+                        <?php echo $p; ?>
+                    </button>
+                <?php endfor; ?>
+                <?php if ($end_p < $total_pages) echo '<span style="color: #94a3b8; font-weight: bold; padding: 0 2px;">...</span>'; ?>
+
+                <!-- Next Button -->
+                <button type="button" <?php echo ($page >= $total_pages) ? 'disabled' : 'onclick="smGoToPage(' . ($page + 1) . ')"'; ?> class="sm-btn" style="height: 36px; padding: 0 14px; font-size: 12px; font-weight: 700; border-radius: 10px; background: <?php echo ($page >= $total_pages) ? '#f1f5f9' : '#ffffff'; ?>; color: <?php echo ($page >= $total_pages) ? '#94a3b8' : '#334155'; ?>; border: 1px solid #cbd5e1; cursor: <?php echo ($page >= $total_pages) ? 'not-allowed' : 'pointer'; ?>;">
+                    التالي
+                </button>
+            </div>
+        </div>
+        <?php endif; ?>
+        <?php
+        $pagination_html = ob_get_clean();
+
+        wp_send_json_success(array(
+            'html' => $rows_html,
+            'pagination' => $pagination_html,
+            'total_records' => $total_records,
+            'total_pages' => $total_pages,
+            'current_page' => $page
+        ));
     }
 
     public function ajax_mark_contacted() {
@@ -4391,36 +4445,96 @@ class SM_Public {
             }
         }
 
-        // Handle Violation CSV Upload
+        // Handle Violation CSV / Excel Upload
         if (isset($_POST['sm_import_violations_csv']) && wp_verify_nonce($_POST['sm_admin_nonce'], 'sm_admin_action')) {
-            if (current_user_can('إدارة_المخالفات')) {
-                $handle = fopen($_FILES['csv_file']['tmp_name'], "r");
-                $header = fgetcsv($handle); // skip header
-                $count = 0;
-                while (($data = fgetcsv($handle)) !== FALSE) {
-                    if (count($data) >= 4) {
-                        // code, type, severity, details, action, reward
-                        $student = SM_DB::get_student_by_code($data[0]);
-                        if ($student) {
-                            $rid = SM_DB::add_record(array(
-                                'student_id' => $student->id,
-                                'type' => $data[1],
-                                'severity' => $data[2],
-                                'details' => $data[3],
-                                'action_taken' => isset($data[4]) ? $data[4] : '',
-                                'reward_penalty' => isset($data[5]) ? $data[5] : ''
-                            ), true); // Skip individual logs
-                            if ($rid) {
-                                $count++;
-                                SM_Notifications::send_violation_alert($rid);
+            if (current_user_can('إدارة_المخالفات') || current_user_can('manage_options')) {
+                @set_time_limit(600);
+                @ini_set('memory_limit', '512M');
+
+                if (!empty($_FILES['csv_file']['tmp_name']) && is_uploaded_file($_FILES['csv_file']['tmp_name'])) {
+                    global $wpdb;
+
+                    // Pre-fetch all student codes into memory for O(1) performance lookup
+                    $students_raw = $wpdb->get_results("SELECT id, student_code FROM {$wpdb->prefix}sm_students WHERE student_code != ''");
+                    $student_map = array();
+                    foreach ($students_raw as $st) {
+                        $code_key = mb_strtolower(trim($st->student_code));
+                        $student_map[$code_key] = $st->id;
+                    }
+
+                    $handle = fopen($_FILES['csv_file']['tmp_name'], "r");
+                    if ($handle !== FALSE) {
+                        // Strip UTF-8 BOM if present
+                        $bom = fread($handle, 3);
+                        if ($bom !== "\xEF\xBB\xBF") {
+                            rewind($handle);
+                        }
+
+                        $header = fgetcsv($handle); // skip header row
+                        $count = 0;
+
+                        $wpdb->query("START TRANSACTION");
+
+                        while (($data = fgetcsv($handle)) !== FALSE) {
+                            if (empty($data) || (count($data) === 1 && empty($data[0]))) continue;
+
+                            $stu_code = mb_strtolower(trim($data[0] ?? ''));
+                            if (empty($stu_code)) continue;
+
+                            $student_id = $student_map[$stu_code] ?? null;
+
+                            if (!$student_id) {
+                                // Fallback DB lookup if not in map
+                                $st_obj = SM_DB::get_student_by_code($stu_code);
+                                if ($st_obj) {
+                                    $student_id = $st_obj->id;
+                                    $student_map[$stu_code] = $student_id;
+                                }
+                            }
+
+                            if ($student_id) {
+                                $v_type = sanitize_text_field($data[1] ?? 'مخالفة سلوكية');
+                                $v_severity_raw = mb_strtolower(trim($data[2] ?? ''));
+
+                                // Severity normalization
+                                $v_severity = 'low';
+                                if (in_array($v_severity_raw, array('2', 'متوسطة', 'medium'))) {
+                                    $v_severity = 'medium';
+                                } elseif (in_array($v_severity_raw, array('3', '4', 'خطيرة', 'جسيمة', 'شديدة الخطورة', 'high', 'severe'))) {
+                                    $v_severity = 'high';
+                                }
+
+                                $v_details = sanitize_textarea_field($data[3] ?? '');
+                                $v_action = sanitize_text_field($data[4] ?? '');
+                                $v_reward = sanitize_text_field($data[5] ?? '');
+                                $v_date = !empty($data[6]) ? sanitize_text_field($data[6]) : current_time('Y-m-d H:i:s');
+
+                                $rid = SM_DB::add_record(array(
+                                    'student_id' => $student_id,
+                                    'type' => $v_type,
+                                    'severity' => $v_severity,
+                                    'details' => $v_details,
+                                    'action_taken' => $v_action,
+                                    'reward_penalty' => $v_reward,
+                                    'created_at' => $v_date
+                                ), true); // Skip individual logs for batch performance
+
+                                if ($rid) {
+                                    $count++;
+                                }
                             }
                         }
+
+                        $wpdb->query("COMMIT");
+                        fclose($handle);
+
+                        SM_Logger::log('استيراد مخالفات (جماعي)', "تم استيراد ($count) سجل مخالفات بنجاح من ملف Excel/CSV.");
+
+                        $redirect_url = remove_query_arg(array('sm_admin_msg', 'imported_count'), $_SERVER['REQUEST_URI']);
+                        wp_redirect(add_query_arg(array('sm_admin_msg' => 'csv_imported', 'imported_count' => $count), $redirect_url));
+                        exit;
                     }
                 }
-                fclose($handle);
-                SM_Logger::log('استيراد مخالفات (جماعي)', "تم استيراد ($count) مخالفة بنجاح.");
-                wp_redirect(add_query_arg('sm_admin_msg', 'csv_imported', $_SERVER['REQUEST_URI']));
-                exit;
             }
         }
     }

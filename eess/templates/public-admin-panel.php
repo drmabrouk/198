@@ -563,13 +563,14 @@ $greeting = ($hour >= 5 && $hour < 12) ? 'صباح الخير' : 'مساء ال�
             
             <?php if (isset($_GET['sm_admin_msg'])):
                 $msg_type = sanitize_text_field($_GET['sm_admin_msg']);
+                $imported_cnt = isset($_GET['imported_count']) ? intval($_GET['imported_count']) : 0;
                 $messages_map = array(
                     'settings_saved' => 'تم حفظ الإعدادات والخيارات بنجاح ومزامنتها وتحديث القائمة فوراً مع كافة الأنظمة والرتب.',
                     'student_added' => 'تمت إضافة الطالب بنجاح بالنظام.',
                     'student_deleted' => 'تم حذف سجل الطالب وكافة بياناته بنجاح.',
                     'restored' => 'تمت استعادة النسخة الاحتياطية بنجاح.',
                     'demo_deleted' => 'تمت تهيئة النظام وحذف البيانات التجريبية بنجاح.',
-                    'csv_imported' => 'تم استيراد البيانات من ملف Excel بنجاح.',
+                    'csv_imported' => $imported_cnt > 0 ? "تم استيراد ($imported_cnt) سجل بنجاح من ملف Excel/CSV." : 'تم استيراد البيانات بنجاح.',
                     'error' => 'حدث خطأ غير متوقع. يرجى التحقق من البيانات وإعادة المحاولة.'
                 );
                 $msg_text = $messages_map[$msg_type] ?? '';
